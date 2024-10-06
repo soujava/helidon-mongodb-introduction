@@ -1,0 +1,37 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: intro-helidon-mongodb
+  labels:
+    app: intro-helidon-mongodb
+spec:
+  type: ClusterIP
+  selector:
+    app: intro-helidon-mongodb
+  ports:
+    - name: tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: intro-helidon-mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: intro-helidon-mongodb
+  template:
+    metadata:
+      labels:
+        app: intro-helidon-mongodb
+        version: v1
+    spec:
+      containers:
+      - name: intro-helidon-mongodb
+        image: intro-helidon-mongodb
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
